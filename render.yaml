@@ -1,0 +1,19 @@
+# Render "Blueprint": in Render choose New → Blueprint and pick this GitHub repo.
+services:
+  - type: web
+    name: moto-nzuri-cashbook
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips="*"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DATABASE_URL
+        sync: false          # paste your Supabase connection string in the Render dashboard
+      - key: SECRET_KEY
+        generateValue: true  # Render makes a long random key for you
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: APP_TIMEZONE
+        value: Africa/Nairobi
